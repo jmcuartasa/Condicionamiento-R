@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Condicionamiento Clásico Aplicado — 25 Escenarios</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;background:linear-gradient(135deg,#0f1724 0%,#1a2744 50%,#0f1724 100%);color:#e8e6e1;font-family:Georgia,'Times New Roman',serif;padding:0}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex}
+/* INTRO */
+#intro{align-items:center;justify-content:center;padding:20px}
+#intro .inner{max-width:720px;text-align:center}
+.sub{font-size:13px;letter-spacing:6px;text-transform:uppercase;color:#7b9cc2;margin-bottom:12px}
+h1{font-size:34px;font-weight:400;line-height:1.2;margin:0 0 16px;color:#f0ece4}
+h2.subtitle{font-size:18px;font-weight:300;color:#9bb0c9;margin:0 0 32px}
+.desc{font-size:15px;line-height:1.8;color:#b0aaa0;text-align:left;max-width:600px;margin:0 auto 36px;padding:0 20px}
+.desc strong{color:#d4cfc5}
+.desc p{margin-bottom:16px}
+.btn-main{padding:14px 48px;font-size:16px;background:linear-gradient(135deg,#2d6ca2,#1a4a7a);color:#f0ece4;border:1px solid #3d7cb2;border-radius:6px;cursor:pointer;letter-spacing:1px;font-family:inherit}
+.btn-main:hover{filter:brightness(1.15)}
+/* EXERCISE */
+#exercise{flex-direction:column;padding:16px 12px}
+.ex-wrap{max-width:860px;margin:0 auto;width:100%}
+.ex-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ex-header .lbl{font-size:12px;color:#7b9cc2;letter-spacing:3px;text-transform:uppercase}
+.dots{display:flex;gap:4px;flex-wrap:wrap}
+.dots .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.1)}
+.dots .dot.current{background:#7b9cc2}
+.dots .dot.correct{background:#2d936c}
+.dots .dot.wrong{background:#c22d4e}
+.title-row{margin-bottom:16px;display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.badge{font-size:11px;padding:3px 10px;border-radius:3px;color:#fff;display:inline-block}
+.badge.basico{background:#2d936c}
+.badge.intermedio{background:#e07a00}
+.badge.avanzado{background:#c22d4e}
+.title-row span.t{font-size:20px;font-weight:500}
+.context-box{padding:16px;background:rgba(255,255,255,0.04);border-radius:8px;margin-bottom:20px;font-size:14px;line-height:1.75;color:#c5c0b6;border-left:3px solid #3d5a7a}
+.drag-label{font-size:12px;color:#7b9cc2;margin-bottom:8px;letter-spacing:1px}
+.options{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.opt{padding:10px 14px;background:rgba(255,255,255,0.06);border-radius:6px;font-size:13px;line-height:1.5;color:#d4cfc5;cursor:grab;border:1px solid rgba(255,255,255,0.08);transition:all .15s;user-select:none}
+.opt:active{cursor:grabbing}
+.opt.selected{background:rgba(45,109,162,0.25);border-color:#3d7cb2}
+.opt.hidden{display:none}
+.slots{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.slot{display:flex;align-items:stretch;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.02);min-height:52px}
+.slot.ok{border-color:#2d936c}
+.slot.fail{border-color:#c22d4e}
+.slot-label{width:80px;min-width:80px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#7b9cc2;background:rgba(123,156,194,0.08);flex-shrink:0}
+.slot.ok .slot-label{color:#2d936c;background:rgba(45,147,108,0.15)}
+.slot.fail .slot-label{color:#c22d4e;background:rgba(194,45,78,0.15)}
+.slot-content{flex:1;padding:10px 14px;font-size:13px;line-height:1.5;color:#d4cfc5;display:flex;align-items:center}
+.slot-content.empty{color:#444;font-style:italic}
+.slot-icon{display:flex;align-items:center;padding-right:12px;font-size:16px}
+.fb-route{padding:16px;background:rgba(45,109,162,0.1);border-radius:8px;margin-bottom:10px}
+.fb-route .fb-title{font-size:13px;font-weight:600;color:#7b9cc2;margin-bottom:6px}
+.fb-route .fb-text{font-size:13px;line-height:1.7;color:#b0aaa0}
+.fb-tip{padding:12px;background:rgba(192,45,78,0.08);border-radius:8px;font-size:12px;line-height:1.6;color:#c9a080;margin-bottom:20px}
+.fb-tip strong{color:#c9a080}
+.actions{display:flex;gap:10px;justify-content:space-between;padding-bottom:30px}
+.btn-sec{padding:10px 20px;font-size:13px;background:transparent;color:#7b9cc2;border:1px solid #3d5a7a;border-radius:5px;cursor:pointer;font-family:inherit}
+.btn-sec:disabled{color:#333;border-color:#222;cursor:default}
+.btn-pri{padding:10px 28px;font-size:13px;background:linear-gradient(135deg,#2d6ca2,#1a4a7a);color:#f0ece4;border:1px solid #3d5a7a;border-radius:5px;cursor:pointer;font-family:inherit}
+.btn-pri:disabled{background:#1a2744;color:#444;cursor:default}
+/* RESULTS */
+#results{flex-direction:column;padding:24px}
+.res-wrap{max-width:800px;margin:0 auto;width:100%}
+.res-header{text-align:center;margin-bottom:40px}
+.scores{display:flex;justify-content:center;gap:40px;margin-bottom:24px}
+.scores .s{text-align:center}
+.scores .s .n{font-size:48px;font-weight:700}
+.scores .s .n.g{color:#2d936c}
+.scores .s .n.r{color:#c22d4e}
+.scores .s .n.o{color:#e07a00}
+.scores .s .l{font-size:14px;color:#9bb0c9}
+.pct{font-size:16px;color:#b0aaa0;margin-bottom:8px}
+.verdict{font-size:14px;font-weight:600}
+.res-btns{display:flex;justify-content:center;gap:12px;margin-bottom:32px}
+.key-card{margin-bottom:24px;padding:20px;background:rgba(255,255,255,0.03);border-radius:8px;border-left:3px solid #7b9cc2}
+.key-card.basico{border-left-color:#2d936c}
+.key-card.intermedio{border-left-color:#e07a00}
+.key-card.avanzado{border-left-color:#c22d4e}
+.key-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.key-head .ttl{font-weight:600;font-size:15px}
+.key-head .st{margin-left:auto;font-size:13px}
+.key-ctx{font-size:13px;color:#b0aaa0;margin-bottom:12px;line-height:1.6}
+.key-el{margin-bottom:6px;font-size:13px;line-height:1.5}
+.key-el .k{color:#7b9cc2;font-weight:600;min-width:30px;display:inline-block}
+.key-el .v{color:#d4cfc5}
+.key-route{margin-top:10px;padding:12px;background:rgba(45,109,162,0.1);border-radius:5px;font-size:13px;line-height:1.6}
+.key-route strong{color:#7b9cc2}
+.key-route span{color:#b0aaa0}
+.key-tip{margin-top:8px;padding:10px;background:rgba(192,45,78,0.08);border-radius:5px;font-size:12px;line-height:1.5;color:#c9a080}
+</style>
+</head>
+<body>
+
+<!-- INTRO SCREEN -->
+<div id="intro" class="screen active">
+<div class="inner">
+  <div class="sub">Maestría en Psicología</div>
+  <h1>Condicionamiento Clásico Aplicado</h1>
+  <h2 class="subtitle">25 Escenarios de Políticas Públicas, Normas Sociales y Comportamiento</h2>
+  <div class="desc">
+    <p><strong>Objetivo:</strong> Identificar correctamente los cinco elementos del condicionamiento clásico (EI, EN, EC, RI, RC) y comprender la ruta completa de adquisición en escenarios realistas de complejidad creciente.</p>
+    <p><strong>Instrucciones:</strong> Para cada escenario, lea el contexto con atención. Luego, toque una descripción para seleccionarla y después toque el slot correcto (EI, EN, EC, RI, RC) para asignarla. Una vez asignados los 5 elementos, presione "Verificar". Recibirá retroalimentación inmediata.</p>
+    <p><strong>Niveles:</strong> <span style="color:#2d936c">Básico (1-8)</span> → <span style="color:#e07a00">Intermedio (9-17)</span> → <span style="color:#c22d4e">Avanzado (18-25)</span></p>
+  </div>
+  <button class="btn-main" onclick="startApp()">Comenzar</button>
+</div>
+</div>
+
+<!-- EXERCISE SCREEN -->
+<div id="exercise" class="screen">
+<div class="ex-wrap">
+  <div class="ex-header">
+    <div class="lbl" id="scenarioLabel"></div>
+    <div class="dots" id="dotsContainer"></div>
+  </div>
+  <div class="title-row" id="titleRow"></div>
+  <div class="context-box" id="contextBox"></div>
+  <div class="drag-label">SELECCIONE UNA DESCRIPCIÓN Y LUEGO TOQUE EL COMPONENTE CORRECTO:</div>
+  <div class="options" id="optionsContainer"></div>
+  <div class="slots" id="slotsContainer"></div>
+  <div id="feedbackContainer"></div>
+  <div class="actions">
+    <button class="btn-sec" id="btnPrev" onclick="goPrev()">← Anterior</button>
+    <div style="display:flex;gap:10px">
+      <button class="btn-pri" id="btnVerify" onclick="handleSubmit()">Verificar</button>
+      <button class="btn-pri" id="btnNext" onclick="goNext()" style="display:none">Siguiente →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div id="results" class="screen">
+<div class="res-wrap">
+  <div class="res-header">
+    <div class="sub" style="margin-bottom:8px">Resultados</div>
+    <h1 style="font-size:32px;margin-bottom:24px">Evaluación Final</h1>
+    <div class="scores" id="scoresDiv"></div>
+    <div class="pct" id="pctDiv"></div>
+    <div class="verdict" id="verdictDiv"></div>
+  </div>
+  <div class="res-btns">
+    <button class="btn-sec" id="btnToggleKeys" onclick="toggleKeys()">Ver claves de respuesta y justificación</button>
+    <button class="btn-sec" onclick="resetApp()">Reiniciar</button>
+  </div>
+  <div id="keysContainer" style="display:none"></div>
+</div>
+</div>
+
+<script>
+const SCENARIOS=[{id:1,level:"Básico",title:"El himno nacional y el patriotismo",context:"Cada vez que suena el himno nacional en actos oficiales, los ciudadanos se ponen de pie, experimentan orgullo y emoción. Originalmente, la melodía del himno era solo una composición musical sin significado especial. Sin embargo, tras años de asociación repetida con ceremonias solemnes, símbolos patrios y narrativas de identidad nacional, la simple melodía provoca automáticamente una respuesta emocional intensa.",ei:"Ceremonias solemnes, símbolos patrios y narrativas de identidad nacional (contexto de pertenencia grupal y significado colectivo)",en:"Melodía del himno nacional (antes de la asociación, era solo una pieza musical neutra)",ec:"Melodía del himno nacional (después de la asociación repetida con las ceremonias y el significado nacional)",ri:"Emoción de orgullo, pertenencia y solemnidad (respuesta emocional automática ante el contexto ceremonial)",rc:"Emoción de orgullo, solemnidad y respuesta de ponerse de pie (respuesta condicionada que ahora provoca la melodía sola)",route:"Inicialmente, las ceremonias solemnes (EI) producen orgullo y emoción (RI). La melodía del himno (EN) se presenta repetidamente junto con esas ceremonias. Tras múltiples emparejamientos, la melodía sola (ahora EC) provoca orgullo y la conducta de ponerse de pie (RC), sin necesidad de la ceremonia completa.",tip:"Diferéncielo del condicionamiento operante: aquí no hay consecuencia que refuerce; la respuesta emocional se elicita automáticamente por la asociación, no por sus consecuencias."},{id:2,level:"Básico",title:"Sirena de ambulancia y ansiedad urbana",context:"En una ciudad con alta accidentalidad vial, los residentes escuchan frecuentemente sirenas de ambulancia que acompañan escenas de accidentes, heridos y caos. Con el tiempo, el simple sonido de la sirena, incluso a la distancia y sin accidente visible, provoca ansiedad, taquicardia y malestar en los ciudadanos.",ei:"Escenas de accidentes, heridos y caos vial (estimulación aversiva directa)",en:"Sonido de la sirena de ambulancia (antes de la asociación, un sonido fuerte pero sin significado emocional específico)",ec:"Sonido de la sirena de ambulancia (tras asociaciones repetidas con los accidentes)",ri:"Ansiedad, taquicardia, activación del sistema nervioso simpático (respuesta automática al peligro percibido)",rc:"Ansiedad, taquicardia y malestar (provocados ahora por la sirena sola, sin accidente visible)",route:"Las escenas de accidentes (EI) provocan ansiedad (RI). La sirena (EN) acompaña repetidamente dichas escenas. Tras el condicionamiento, la sirena sola (EC) elicita ansiedad y activación fisiológica (RC).",tip:"La RC suele ser de menor intensidad que la RI original, y puede generalizarse a sonidos similares (generalización del estímulo)."},{id:3,level:"Básico",title:"Campañas de salud pública y miedo al cigarrillo",context:"El gobierno implementa una política pública que obliga a incluir imágenes gráficas de enfermedades (cáncer pulmonar, gangrena) en las cajetillas de cigarrillos. Inicialmente, el empaque del cigarrillo no provoca repulsión, pero tras la exposición repetida a las imágenes aversivas junto con el empaque, ver la cajetilla genera asco y malestar.",ei:"Imágenes gráficas de enfermedades graves (cáncer, gangrena) — estimulación visual aversiva incondicionada",en:"Empaque de la cajetilla de cigarrillos (antes de la política, un objeto neutro emocionalmente)",ec:"Empaque de la cajetilla de cigarrillos (tras asociación repetida con las imágenes aversivas)",ri:"Asco, repulsión, malestar visceral (respuesta automática a imágenes de enfermedad)",rc:"Asco, repulsión y malestar (ahora provocados por ver el empaque, incluso sin mirar las imágenes)",route:"Las imágenes aversivas (EI) producen asco automático (RI). El empaque (EN) se empareja repetidamente con dichas imágenes. El empaque se convierte en EC y provoca asco (RC), fundamentando la política de salud pública en el condicionamiento clásico aversivo.",tip:"Aquí el Estado utiliza deliberadamente el condicionamiento clásico como herramienta de política pública para modificar actitudes hacia el consumo de tabaco."},{id:4,level:"Básico",title:"El timbre escolar y la activación conductual",context:"En un colegio público, el timbre suena siempre al mismo tiempo que los niños son liberados al recreo (un evento intrínsecamente reforzante y emocionalmente positivo). Con el tiempo, solo escuchar el timbre provoca excitación motora, alegría y preparación para salir, incluso cuando el timbre suena en un contexto diferente.",ei:"Liberación al recreo (evento de libertad, juego y reforzamiento social intrínseco)",en:"Sonido del timbre escolar (inicialmente neutro)",ec:"Sonido del timbre escolar (tras asociación repetida con la liberación al recreo)",ri:"Excitación motora, alegría, activación anticipatoria (respuesta automática al evento de recreo)",rc:"Excitación, alegría y preparación motora (ahora elicitadas solo por el timbre)",route:"El recreo (EI) provoca excitación y alegría (RI). El timbre (EN) precede consistentemente al recreo. Tras condicionamiento, el timbre (EC) elicita la excitación por sí solo (RC).",tip:"Nótese la diferencia con el operante: el timbre no refuerza una conducta específica, sino que elicita una respuesta emocional/fisiológica automática."},{id:5,level:"Básico",title:"Logo gubernamental y confianza institucional",context:"Un gobierno local implementa un programa de ayuda social eficiente que beneficia tangiblemente a las comunidades más vulnerables. Cada entrega de beneficios se realiza con el logo oficial del programa prominentemente visible. Con el tiempo, la simple presencia del logo en cualquier contexto genera una respuesta de confianza y seguridad en los ciudadanos.",ei:"Recepción de beneficios tangibles y ayuda social efectiva (satisfacción de necesidades reales)",en:"Logo oficial del programa gubernamental (inicialmente un símbolo gráfico sin carga emocional)",ec:"Logo oficial del programa (tras asociarse repetidamente con los beneficios recibidos)",ri:"Sensación de seguridad, alivio, confianza (respuesta automática ante la satisfacción de necesidades)",rc:"Confianza, seguridad y disposición positiva (ahora provocadas por el logo solo)",route:"Los beneficios tangibles (EI) generan confianza y alivio (RI). El logo (EN) acompaña cada entrega. El logo (EC) pasa a elicitar confianza (RC) sin necesidad del beneficio directo.",tip:"Esto explica cómo se construye la confianza institucional y el capital simbólico del Estado a través de mecanismos pavlovianos."},{id:6,level:"Básico",title:"Propaganda electoral y activación emocional",context:"Durante campañas electorales, un partido político empareja sistemáticamente su jingle con imágenes emotivas de familias felices, niños jugando y comunidades prósperas. Tras meses de exposición mediática, escuchar el jingle solo —sin las imágenes— provoca una sensación cálida y favorable hacia el partido.",ei:"Imágenes emotivas de bienestar familiar y comunitario (activan respuestas emocionales positivas innatas)",en:"Jingle del partido político (una melodía sin significado emocional previo)",ec:"Jingle del partido político (tras emparejamiento repetido con las imágenes emotivas)",ri:"Emoción cálida, ternura, sensación de bienestar (respuesta automática a imágenes de bienestar social)",rc:"Emoción cálida y disposición favorable hacia el partido (elicitada ahora solo por el jingle)",route:"Las imágenes de bienestar (EI) provocan emociones positivas (RI). El jingle (EN) se empareja repetidamente. El jingle (EC) provoca las emociones positivas (RC) y se transfieren al partido.",tip:"La propaganda política utiliza condicionamiento evaluativo (subclase del clásico) para modificar actitudes sin argumentación racional."},{id:7,level:"Básico",title:"Uniforme policial y miedo en comunidades marginadas",context:"En barrios con historial de abuso policial, la presencia del uniforme policial se ha asociado repetidamente con redadas violentas, detenciones arbitrarias y agresiones. Los residentes ahora experimentan miedo y tensión al ver cualquier uniforme policial, incluso cuando el oficial está en una situación completamente pacífica.",ei:"Redadas violentas, detenciones arbitrarias y agresiones (estimulación aversiva directa)",en:"Uniforme policial (inicialmente una vestimenta institucional neutra)",ec:"Uniforme policial (tras asociación repetida con experiencias de violencia institucional)",ri:"Miedo intenso, respuesta de huida, activación simpática (respuesta automática ante la violencia directa)",rc:"Miedo, tensión y evitación (ahora provocados por el uniforme solo, sin violencia presente)",route:"La violencia policial (EI) genera miedo (RI). El uniforme (EN) acompaña dichas experiencias. El uniforme (EC) pasa a elicitar miedo automáticamente (RC), independientemente del comportamiento actual del oficial.",tip:"Este ejemplo ilustra cómo el condicionamiento clásico explica la desconfianza institucional y tiene implicaciones directas para las políticas de relación policía-comunidad."},{id:8,level:"Básico",title:"Multas de tránsito y la cámara de fotomulta",context:"Un municipio instala cámaras de fotomulta. Cada vez que un conductor es multado, recibe una notificación de sanción económica (un evento aversivo). Con el tiempo, la sola presencia visible de una cámara de fotomulta provoca una respuesta de ansiedad y desaceleración inmediata, incluso cuando el conductor va a velocidad legal.",ei:"Recepción de la sanción económica (multa) — evento aversivo incondicionado",en:"Cámara de fotomulta visible (antes de la asociación, un objeto tecnológico neutro)",ec:"Cámara de fotomulta visible (tras asociarse con sanciones económicas)",ri:"Ansiedad, malestar, activación autonómica (respuesta automática ante la pérdida económica)",rc:"Ansiedad y desaceleración refleja (ahora provocadas por la cámara sola, sin multa efectiva)",route:"La multa (EI) genera ansiedad (RI). La cámara (EN) se asocia con la multa. La cámara (EC) ahora provoca ansiedad y desaceleración (RC).",tip:"Obsérvese: la desaceleración operante (evitar multa futura) coexiste con la RC emocional (ansiedad condicionada). Un análisis completo requiere distinguir ambos procesos."},{id:9,level:"Intermedio",title:"Notificaciones digitales y estrés laboral crónico",context:"Un trabajador de una institución pública recibe constantemente correos electrónicos con demandas urgentes, evaluaciones negativas y presión laboral. Cada notificación sonora del correo precede a estos mensajes estresantes. Tras meses, el simple sonido de notificación —incluso en su correo personal— provoca taquicardia, tensión muscular y ansiedad anticipatoria.",ei:"Contenido de correos con demandas urgentes, evaluaciones negativas y presión laboral (estresor directo)",en:"Sonido de notificación del correo electrónico (inicialmente neutro)",ec:"Sonido de notificación del correo (tras asociación con contenidos estresantes)",ri:"Estrés, activación del eje HPA, tensión muscular (respuesta fisiológica al estresor directo)",rc:"Taquicardia, tensión muscular y ansiedad anticipatoria (provocadas por el sonido solo, generalización a otros contextos)",route:"Los correos estresantes (EI) provocan estrés fisiológico (RI). El sonido de notificación (EN) precede consistentemente al contenido aversivo. El sonido (EC) ahora elicita la respuesta de estrés (RC) incluso en contextos no laborales, demostrando generalización del estímulo.",tip:"La generalización del EC a contextos no laborales es un fenómeno clave: el condicionamiento trasciende el contexto original de adquisición."},{id:10,level:"Intermedio",title:"Señalización sanitaria y norma social de higiene",context:"Durante una pandemia, el gobierno coloca señalización específica (un ícono de manos con agua) en todos los puntos de acceso a edificios públicos. Cada señal está acompañada de dispensadores de gel y de la presión social del entorno (personas que observan y juzgan). Tras meses, ver el ícono en cualquier contexto provoca automáticamente la conducta de buscar gel y la sensación de deber social.",ei:"Presión social del entorno (miradas de otros, juicio social implícito) — activador incondicionado de conformidad",en:"Ícono de la señalización sanitaria (símbolo gráfico inicialmente neutro)",ec:"Ícono de la señalización sanitaria (tras asociación con la presión social y el contexto de higiene obligatoria)",ri:"Incomodidad social, activación de tendencias de conformidad y cumplimiento (respuesta automática a la evaluación social)",rc:"Sensación de deber, incomodidad si no se cumple, y búsqueda automática de gel (respuestas elicitadas por el ícono solo)",route:"La presión social (EI) genera incomodidad y conformidad (RI). El ícono (EN) se empareja con la presión social. El ícono (EC) pasa a elicitar la sensación de deber y la búsqueda de gel (RC).",tip:"Aquí el EI es social (presión normativa), no físico. El condicionamiento clásico puede operar con estímulos incondicionados sociales, un punto frecuentemente subestimado."},{id:11,level:"Intermedio",title:"Música ambiental y comportamiento de consumo",context:"Un centro comercial implementa una política de marketing sensorial: pone música navideña suave mientras los clientes experimentan ofertas especiales, descuentos y la euforia de comprar. Tras varias temporadas, escuchar música navideña en cualquier lugar activa el deseo de comprar y la excitación consumista, aun fuera de temporada.",ei:"Experiencia de ofertas, descuentos y euforia de adquirir productos (reforzamiento consumatorio directo)",en:"Música navideña ambiental (inicialmente solo una melodía estacional)",ec:"Música navideña (tras asociación repetida con la experiencia de consumo gratificante)",ri:"Excitación, dopamina anticipatoria, euforia consumista (respuesta automática a la gratificación de comprar)",rc:"Deseo de comprar, excitación consumista y activación hedónica (ahora elicitadas por la música navideña en cualquier contexto)",route:"La experiencia de compra gratificante (EI) produce excitación (RI). La música navideña (EN) acompaña repetidamente la experiencia. La música (EC) provoca excitación consumista (RC) incluso fuera de contexto.",tip:"El marketing sensorial se basa explícitamente en el condicionamiento clásico. Este caso permite discutir las implicaciones éticas de la manipulación pavloviana en políticas comerciales."},{id:12,level:"Intermedio",title:"Acento regional y prejuicio social",context:"En un país con marcadas diferencias socioeconómicas regionales, ciertos acentos se han asociado repetidamente en los medios de comunicación con imágenes de pobreza, delincuencia y marginalidad. Los ciudadanos que nunca han visitado esas regiones experimentan automáticamente desconfianza y actitudes despectivas al escuchar el acento, sin interacción directa.",ei:"Imágenes mediáticas de pobreza, delincuencia y marginalidad (activadores de respuestas de amenaza y rechazo social)",en:"Acento regional específico (un rasgo fonético neutro en sí mismo)",ec:"Acento regional (tras asociación mediática repetida con imágenes negativas)",ri:"Desconfianza, activación de esquemas de amenaza, rechazo (respuesta automática ante indicadores de peligro social)",rc:"Desconfianza, actitud despectiva y evitación social (ahora provocadas automáticamente por el acento)",route:"Las imágenes mediáticas negativas (EI) generan rechazo (RI). El acento (EN) se empareja repetidamente en medios con dichas imágenes. El acento (EC) pasa a elicitar automáticamente desconfianza y rechazo (RC), constituyendo un prejuicio condicionado.",tip:"Este escenario muestra el condicionamiento clásico como mecanismo de formación de prejuicios, con implicaciones directas para políticas de equidad y representación mediática."},{id:13,level:"Intermedio",title:"Aroma institucional y adherencia al tratamiento",context:"Una clínica de salud pública utiliza un difusor con un aroma específico de lavanda en sus salas de espera. Las consultas médicas son empáticas, respetuosas y los pacientes reciben atención efectiva que alivia su malestar. Tras múltiples visitas, el aroma de lavanda por sí solo (en una tienda, por ejemplo) provoca una sensación de calma y confianza asociada a la experiencia de cuidado.",ei:"Atención médica empática, efectiva y respetuosa (experiencia de cuidado y alivio del malestar)",en:"Aroma de lavanda del difusor (inicialmente un olor agradable pero sin asociación específica con salud)",ec:"Aroma de lavanda (tras asociación repetida con la experiencia de cuidado médico efectivo)",ri:"Calma, sensación de seguridad, alivio (respuesta automática ante el cuidado efectivo)",rc:"Calma, confianza y disposición positiva hacia la salud (ahora elicitadas por el aroma solo)",route:"La atención empática (EI) genera calma y confianza (RI). El aroma (EN) acompaña cada consulta. El aroma (EC) provoca calma y confianza (RC), facilitando la adherencia terapéutica.",tip:"Se puede diseñar deliberadamente el ambiente institucional como EC para mejorar actitudes hacia la salud: una aplicación ética del condicionamiento clásico en política sanitaria."},{id:14,level:"Intermedio",title:"Color del partido y voto emocional",context:"Un partido político utiliza consistentemente el color naranja en toda su simbología. Durante años, ese color acompaña discursos carismáticos, concentraciones multitudinarias llenas de energía y experiencias de pertenencia grupal eufórica. Años después, el simple color naranja en un cartel genera automáticamente una reacción favorable y de cercanía, incluso sin contenido político explícito.",ei:"Discursos carismáticos, concentraciones multitudinarias y experiencia de pertenencia grupal eufórica (activadores emocionales incondicionados)",en:"Color naranja (un tono cromático sin carga política inherente)",ec:"Color naranja (tras asociación con experiencias eufóricas del partido)",ri:"Euforia, sentido de pertenencia, excitación social (respuestas emocionales a la experiencia grupal intensa)",rc:"Reacción favorable, cercanía y disposición positiva (ahora provocadas por el color solo)",route:"Las experiencias grupales eufóricas (EI) generan euforia y pertenencia (RI). El color naranja (EN) acompaña dichas experiencias. El color (EC) provoca disposición favorable (RC), influenciando el voto sin mediación racional.",tip:"Esto es condicionamiento evaluativo: el EC adquiere valencia afectiva. Es resistente a la extinción y no requiere consciencia de la contingencia, lo que plantea preguntas sobre la racionalidad democrática."},{id:15,level:"Intermedio",title:"Alarma sísmica y respuesta de evacuación",context:"En una ciudad con actividad sísmica frecuente, se instala un sistema de alerta temprana con un sonido específico. Las primeras veces, el sonido precede a temblores reales (con su miedo y desplazamiento). Tras varios eventos, el sonido de la alarma —incluso en simulacros— provoca taquicardia, miedo y una respuesta motora de evacuación automática.",ei:"Temblor sísmico real (estimulación vestibular, amenaza directa a la integridad física)",en:"Sonido específico de la alarma sísmica (inicialmente un tono artificial sin significado)",ec:"Sonido de la alarma sísmica (tras emparejamiento con temblores reales)",ri:"Miedo intenso, taquicardia, respuesta de lucha/huida (respuesta fisiológica automática al peligro real)",rc:"Miedo, taquicardia y respuesta motora de evacuación (ahora elicitadas por la alarma sola, incluso en simulacros)",route:"El temblor (EI) provoca miedo y activación motora (RI). La alarma (EN) precede al temblor. La alarma (EC) provoca miedo y evacuación (RC). Esto es funcional: la política de protección civil se basa en que el condicionamiento transfiera la urgencia del EI al EC.",tip:"Ejemplo de condicionamiento clásico funcionalmente adaptativo diseñado como política pública de gestión del riesgo. La RC de evacuación, aunque incluye componentes emocionales, es deliberadamente promovida."},{id:16,level:"Intermedio",title:"Etiquetado nutricional tipo semáforo y decisión alimentaria",context:"Una política pública de salud implementa el etiquetado tipo semáforo en alimentos procesados: sellos negros con leyendas de 'EXCESO DE AZÚCAR', 'EXCESO DE SODIO'. Estos sellos se acompañan de campañas mediáticas con imágenes de obesidad, diabetes y complicaciones de salud. Con el tiempo, ver un producto con múltiples sellos negros genera automáticamente rechazo y disminución del apetito.",ei:"Imágenes de campañas mostrando obesidad, diabetes y complicaciones de salud (estimulación visual aversiva)",en:"Sellos negros del etiquetado tipo semáforo (inicialmente marcas gráficas nuevas sin carga emocional)",ec:"Sellos negros del etiquetado (tras asociación con las imágenes de campañas aversivas)",ri:"Rechazo, disminución del apetito, respuesta aversiva (automáticas ante imágenes de enfermedad)",rc:"Rechazo, disminución del apetito y evitación del producto (ahora provocados por los sellos solos)",route:"Las imágenes de enfermedad (EI) generan rechazo y disminución del apetito (RI). Los sellos negros (EN) se emparejan con las campañas. Los sellos (EC) provocan rechazo automático (RC), modificando la decisión alimentaria.",tip:"Es un ejemplo de condicionamiento clásico de segundo orden potencial: si el sello negro (EC₁) se asocia con una marca específica, la marca puede convertirse en EC₂."},{id:17,level:"Intermedio",title:"Espacio público renovado y cohesión comunitaria",context:"Un programa de renovación urbana transforma un parque deteriorado en un espacio con jardines, iluminación y actividades culturales gratuitas. Las experiencias positivas repetidas (conciertos, encuentros, juegos infantiles) se asocian con las características arquitectónicas del nuevo diseño. Los residentes desarrollan una respuesta emocional positiva automática al ver los elementos de diseño del parque, incluso en fotografías.",ei:"Experiencias de disfrute comunitario: conciertos, encuentros sociales, juegos (satisfacción social y hedónica directa)",en:"Elementos arquitectónicos y de diseño del parque renovado (inicialmente neutros estéticamente)",ec:"Elementos de diseño del parque (tras asociación repetida con experiencias comunitarias positivas)",ri:"Alegría, sensación de pertenencia, bienestar (respuestas automáticas a la interacción social gratificante)",rc:"Bienestar, orgullo comunitario y disposición positiva (ahora elicitados por los elementos visuales del parque)",route:"Las experiencias comunitarias (EI) generan bienestar (RI). Los elementos de diseño (EN) acompañan las experiencias. Los elementos (EC) provocan bienestar y orgullo (RC), fortaleciendo el vínculo con el espacio público.",tip:"El urbanismo emocional utiliza principios pavlovianos: el diseño del espacio adquiere carga afectiva que promueve su uso y cuidado. Implicación directa para políticas de urbanismo y convivencia."},{id:18,level:"Avanzado",title:"Condicionamiento de segundo orden: marca y celebridad",context:"Una política pública de promoción de lectura utiliza una celebridad deportiva admirada. La celebridad (que ya elicita admiración condicionada) aparece repetidamente con el logo del programa de lectura. Tras la campaña, el logo solo —sin la celebridad— provoca una disposición positiva hacia la lectura. Aquí operan dos niveles de condicionamiento.",ei:"Logros deportivos reales de la celebridad (EI original que generó admiración)",en:"Fase 1: La imagen de la celebridad (EN₁ → EC₁ tras asociarse con logros). Fase 2: El logo del programa de lectura (EN₂ que se asocia con EC₁)",ec:"Logo del programa de lectura (EC₂, condicionado a través de la celebridad que ya era EC₁)",ri:"Admiración, emoción, activación motivacional (respuesta original a los logros deportivos)",rc:"Disposición positiva hacia la lectura, interés y cercanía (RC₂ elicitada por el logo solo, mediada por el condicionamiento de segundo orden)",route:"Primero: logros deportivos (EI) → admiración (RI); imagen de la celebridad (EN₁) se asocia con logros → imagen (EC₁) elicita admiración (RC₁). Segundo: EC₁ (celebridad) se empareja con el logo del programa (EN₂); el logo (EC₂) ahora elicita disposición positiva (RC₂). Es condicionamiento de segundo orden.",tip:"En el segundo orden, el EC₁ funciona como cuasi-EI para el EN₂. Esto explica cómo las políticas públicas pueden leveragear el capital simbólico de figuras públicas. La RC₂ suele ser más débil que RC₁."},{id:19,level:"Avanzado",title:"Extinción fallida: trauma institucional y re-condicionamiento",context:"Un grupo de desplazados fue reubicado por el gobierno en viviendas nuevas. Sin embargo, las viviendas tienen el mismo tipo de puerta metálica que las de la zona de conflicto donde sufrieron ataques armados. A pesar de estar en un contexto seguro (extinción), ver la puerta metálica provoca pánico. Peor aún, un solo incidente de inseguridad menor re-establece la respuesta completa (readquisición rápida).",ei:"Ataques armados en la zona de conflicto original (amenaza directa a la vida)",en:"Puerta metálica específica (inicialmente un elemento arquitectónico neutro)",ec:"Puerta metálica (tras asociación con los ataques en la zona de conflicto)",ri:"Pánico, respuesta de congelamiento/huida, disociación (respuestas automáticas al peligro vital)",rc:"Pánico, hipervigilancia y evitación (provocados por la puerta metálica en el nuevo contexto, resistentes a la extinción)",route:"Ataques (EI) → pánico (RI). Puerta metálica (EN) se asoció con ataques → puerta (EC) provoca pánico (RC). En reubicación, la extinción es incompleta (renovación contextual fallida). Un evento de inseguridad menor produce readquisición rápida, demostrando que la extinción no es desaprendizaje sino nuevo aprendizaje inhibitorio.",tip:"Fenómenos clave: renovación espontánea, readquisición rápida y recuperación espontánea. La extinción del condicionamiento clásico no elimina la asociación original, solo la inhibe contextualmente. Implicación crucial para políticas de atención a víctimas de conflicto."},{id:20,level:"Avanzado",title:"Inhibición latente y fracaso de campañas preventivas",context:"El gobierno lanza una campaña para asociar el consumo de bebidas azucaradas con enfermedades metabólicas, usando imágenes impactantes (EI). Sin embargo, la población ha tenido décadas de exposición previa a las bebidas azucaradas en contextos neutros y positivos (publicidad, fiestas, infancia). La campaña tiene un efecto mínimo: los ciudadanos no desarrollan la RC aversiva esperada.",ei:"Imágenes de enfermedades metabólicas graves (diabetes, amputaciones, ceguera)",en:"Bebidas azucaradas (presentadas durante décadas sin consecuencias aversivas — preexposición masiva al EN)",ec:"Bebidas azucaradas (la campaña intenta convertirlas en EC, pero la inhibición latente bloquea el condicionamiento)",ri:"Asco, miedo a la enfermedad (respuesta automática a imágenes de enfermedad grave)",rc:"RC aversiva esperada: rechazo a las bebidas. Resultado real: RC mínima o ausente por inhibición latente",route:"La campaña presenta: imágenes de enfermedad (EI) junto con bebidas azucaradas (EN). Pero la preexposición masiva al EN (décadas de consumo en contextos positivos) genera inhibición latente, retardando significativamente la adquisición de la RC aversiva.",tip:"La inhibición latente (Lubow, 1973) demuestra que la historia de exposición al EN afecta la facilidad de condicionamiento. Esto tiene implicaciones enormes para el diseño de políticas: cambiar actitudes hacia estímulos familiares es mucho más difícil que hacia estímulos novedosos."},{id:21,level:"Avanzado",title:"Condicionamiento interoceptivo y ansiedad ante evaluaciones",context:"En un sistema educativo con evaluaciones estandarizadas de alta presión, los estudiantes experimentan repetidamente malestar gástrico y tensión muscular (respuestas interoceptivas) justo antes de recibir resultados negativos. Con el tiempo, las mismas sensaciones interoceptivas se convierten en EC: sentir 'mariposas en el estómago' en cualquier contexto evaluativo elicita ansiedad anticipatoria completa.",ei:"Resultados negativos en evaluaciones de alta presión (fracaso académico con consecuencias reales: pérdida de beca, repetición)",en:"Sensaciones interoceptivas de malestar gástrico y tensión muscular (señales corporales inicialmente solo producidas por el estrés)",ec:"Sensaciones interoceptivas (tras asociación repetida con resultados negativos, se convierten en EC interoceptivos)",ri:"Ansiedad intensa, respuesta de estrés completa, desesperanza (respuesta automática al fracaso académico)",rc:"Ansiedad anticipatoria completa, catastrofización y bloqueo cognitivo (elicitados por las sensaciones interoceptivas en cualquier contexto evaluativo)",route:"El fracaso (EI) genera ansiedad (RI). Las sensaciones corporales previas al fracaso (EN interoceptivo) preceden al resultado. Las sensaciones (EC interoceptivo) pasan a elicitar la ansiedad completa (RC), creando un ciclo donde el cuerpo se convierte en su propio disparador.",tip:"El condicionamiento interoceptivo (Razran, 1961) es particularmente resistente a la extinción porque el EC es interno y no está bajo control voluntario. Implicación clave para entender la ansiedad ante exámenes como problema de salud pública educativa."},{id:22,level:"Avanzado",title:"Bloqueo de Kamin y fracaso de señalización de riesgo",context:"Un municipio señaliza zonas de riesgo de deslizamiento con postes amarillos (EC₁ ya establecido que provoca precaución). Posteriormente, añade una señal sonora de alarma (EN nuevo) junto con los postes, ambos antes de eventos de deslizamiento. Sin embargo, los residentes no desarrollan respuesta condicionada a la señal sonora sola: los postes amarillos ya predicen completamente el peligro, bloqueando el condicionamiento al nuevo estímulo.",ei:"Eventos de deslizamiento real (amenaza directa, destrucción)",en:"Señal sonora de alarma (estímulo nuevo añadido junto al EC₁ ya establecido)",ec:"Postes amarillos (EC₁ ya condicionado que predice completamente el peligro). La señal sonora NO se convierte en EC₂ debido al bloqueo",ri:"Miedo, activación de huida, respuesta de alarma (respuesta automática al deslizamiento)",rc:"Precaución ante postes amarillos (RC establecida para EC₁). Ausencia de RC para la señal sonora (bloqueo)",route:"Fase 1: Deslizamientos (EI) + postes (EN) → postes (EC₁) predicen peligro (RC). Fase 2: Se añade señal sonora (EN₂) junto a postes (EC₁) + deslizamientos (EI). Resultado: la señal sonora no adquiere valor predictivo porque EC₁ ya predice completamente el EI. Esto es el bloqueo de Kamin (1969).",tip:"El bloqueo demuestra que el condicionamiento depende de la informatividad del EN, no solo de la contigüidad. Un estímulo redundante no se condiciona. Esto tiene implicaciones directas para el diseño de sistemas de alerta: múltiples señales no necesariamente significan mejor condicionamiento."},{id:23,level:"Avanzado",title:"Ensombrecimiento y competencia entre señales de política pública",context:"Una campaña gubernamental contra la violencia de género presenta simultáneamente un color morado intenso y un eslogan verbal. El color es visualmente muy saliente; el eslogan es más sutil. Tras la campaña, el color morado elicita una fuerte respuesta de solidaridad, pero el eslogan solo no produce respuesta significativa. El estímulo más saliente ensombreció al menos saliente.",ei:"Testimonios directos de víctimas de violencia de género presentados en la campaña (activadores empáticos incondicionados)",en:"Color morado (EN₁, alta saliencia visual) y eslogan verbal (EN₂, baja saliencia auditiva/verbal), presentados simultáneamente",ec:"Color morado (EC₁, condicionado fuertemente debido a alta saliencia). Eslogan (EC₂ débil o no condicionado, ensombrecido)",ri:"Respuesta empática, indignación, activación prosocial (respuesta automática a los testimonios de víctimas)",rc:"Solidaridad, indignación y activación prosocial fuertes ante el color morado (RC₁). Respuesta mínima ante el eslogan solo (RC₂ ≈ 0)",route:"Testimonios (EI) + [color morado (EN₁) + eslogan (EN₂)] → emparejamiento simultáneo. El color (EN₁) por su alta saliencia captura la mayor parte de la fuerza asociativa, convirtiéndose en EC₁ fuerte. El eslogan (EN₂) es ensombrecido: adquiere poca o ninguna fuerza asociativa.",tip:"El ensombrecimiento (overshadowing; Pavlov, 1927; Mackintosh, 1976) demuestra que no todos los EN presentes durante el condicionamiento se condicionan igualmente. La saliencia relativa determina la competencia. Implicación: el diseño de señales de política pública debe considerar la competencia entre estímulos."},{id:24,level:"Avanzado",title:"Precondicionamiento sensorial y formación de actitudes políticas implícitas",context:"Un medio de comunicación presenta repetidamente, en sus segmentos de entretenimiento, imágenes del país 'X' asociadas con paisajes hermosos y música agradable (Fase 1: asociación EN₁-EN₂, ambos inicialmente neutros). Posteriormente, el país 'X' aparece en noticias vinculado con una crisis humanitaria y sufrimiento (Fase 2: país X se asocia con EI aversivo). Los televidentes, sin embargo, muestran una respuesta aversiva más atenuada hacia el país X comparados con quienes no tuvieron la Fase 1.",ei:"Imágenes de crisis humanitaria y sufrimiento (Fase 2: EI aversivo)",en:"Fase 1: Imágenes del país X (EN₁) y paisajes/música agradable (EN₂), ambos neutros inicialmente. Fase 2: país X se empareja con el EI aversivo",ec:"País X se convierte en EC, pero la RC aversiva está atenuada por la asociación previa positiva (precondicionamiento sensorial)",ri:"Respuesta de compasión, malestar, activación empática ante sufrimiento (RI al ver crisis humanitaria)",rc:"RC aversiva atenuada hacia país X (comparada con controles sin precondicionamiento): la asociación previa país X-paisajes agradables genera un 'escudo' evaluativo",route:"Fase 1 (precondicionamiento): país X (EN₁) + paisajes agradables (EN₂), sin EI → asociación EN-EN. Fase 2: país X (EN₁) + crisis humanitaria (EI) → país X debería convertirse en EC aversivo fuerte. Pero la asociación previa con EN₂ positivo atenúa la RC, demostrando precondicionamiento sensorial (Brogden, 1939).",tip:"El precondicionamiento sensorial demuestra que asociaciones entre estímulos neutros son suficientes para modular el condicionamiento posterior. Esto tiene implicaciones para entender cómo la cobertura mediática previa moldea actitudes políticas implícitas y la percepción de conflictos internacionales."},{id:25,level:"Avanzado",title:"Condicionamiento evaluativo, resistencia a la extinción y políticas de reconciliación",context:"Tras un conflicto armado prolongado, los miembros de dos comunidades fueron expuestos durante décadas a propaganda que emparejaba la imagen del 'otro grupo' con actos de violencia. Ahora, en un proceso de reconciliación, se presentan miembros del otro grupo en contextos positivos (cooperación, ayuda mutua). Sin embargo, las respuestas evaluativas negativas automáticas persisten notablemente, siendo altamente resistentes a la extinción, a diferencia de lo que ocurriría con RCs de miedo típicas.",ei:"Actos de violencia real perpetrados durante el conflicto (experiencia directa o vicaria de violencia intergrupal)",en:"Imagen/presencia de miembros del otro grupo (inicialmente neutros antes del conflicto o la propaganda)",ec:"Imagen/presencia del otro grupo (EC tras décadas de asociación con violencia en propaganda y experiencia directa)",ri:"Miedo, odio, respuesta de amenaza (respuestas automáticas ante la violencia real)",rc:"Evaluación negativa automática, desconfianza, hostilidad implícita (RC evaluativa que persiste a pesar de nuevas experiencias positivas)",route:"Violencia (EI) + imagen del otro grupo (EN) → imagen (EC) provoca hostilidad automática (RC). En reconciliación: EC se presenta sin EI (extinción). Sin embargo, la RC evaluativa es altamente resistente: el condicionamiento evaluativo no se extingue fácilmente con presentaciones no-reforzadas del EC, a diferencia de las RCs de miedo.",tip:"El condicionamiento evaluativo (De Houwer et al., 2001) difiere del condicionamiento clásico del miedo en su resistencia a la extinción, su independencia de la consciencia de contingencia y su menor sensibilidad a la devaluación del EI. Esto tiene implicaciones profundas para las políticas de reconciliación posconflicto: la mera exposición positiva puede ser insuficiente para extinguir actitudes condicionadas evaluativamente."}];
+
+const ELEMENTS=["ei","en","ec","ri","rc"];
+const SHORT={ei:"EI",en:"EN",ec:"EC",ri:"RI",rc:"RC"};
+const LABELS={ei:"Estímulo Incondicionado (EI)",en:"Estímulo Neutro (EN)",ec:"Estímulo Condicionado (EC)",ri:"Respuesta Incondicionada (RI)",rc:"Respuesta Condicionada (RC)"};
+
+let current=0, answers={}, dragSource=null, assignments={}, options=[];
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function levelClass(l){return l==="Básico"?"basico":l==="Intermedio"?"intermedio":"avanzado";}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function startApp(){showScreen('exercise');initScenario(0);}
+function resetApp(){current=0;answers={};showScreen('intro');}
+
+function initScenario(idx){
+  current=idx;
+  const s=SCENARIOS[idx];
+  options=shuffle(ELEMENTS.map(e=>({key:e,text:s[e]})));
+  assignments={};dragSource=null;
+  renderExercise();
+}
+
+function renderExercise(){
+  const s=SCENARIOS[current];
+  const fb=!!answers[current];
+  document.getElementById('scenarioLabel').textContent=`Escenario ${current+1}/25`;
+  // dots
+  let dh='';for(let i=0;i<25;i++){let c='dot';if(answers[i]){c+=answers[i].correct?' correct':' wrong';}else if(i===current)c+=' current';dh+=`<div class="${c}"></div>`;}
+  document.getElementById('dotsContainer').innerHTML=dh;
+  // title
+  document.getElementById('titleRow').innerHTML=`<span class="badge ${levelClass(s.level)}">${s.level}</span><span class="t">${s.title}</span>`;
+  document.getElementById('contextBox').textContent=s.context;
+  // options
+  const assignedKeys=new Set(Object.values(assignments));
+  let oh='';options.forEach(o=>{
+    const hidden=assignedKeys.has(o.key);
+    const sel=dragSource===o.key;
+    oh+=`<div class="opt${sel?' selected':''}${hidden?' hidden':''}" data-key="${o.key}" onclick="selectOpt('${o.key}')">${o.text}</div>`;
+  });
+  document.getElementById('optionsContainer').innerHTML=oh;
+  // slots
+  let sh='';ELEMENTS.forEach(e=>{
+    const aKey=assignments[e];
+    const aOpt=aKey?options.find(o=>o.key===aKey):null;
+    let cls='slot';
+    if(fb&&aKey===e)cls+=' ok';
+    else if(fb&&aKey&&aKey!==e)cls+=' fail';
+    sh+=`<div class="${cls}" onclick="slotClick('${e}')">
+      <div class="slot-label">${SHORT[e]}</div>
+      <div class="slot-content${aOpt?'':' empty'}">${aOpt?aOpt.text:'Toque una descripción y luego este slot'}</div>
+      ${fb?`<div class="slot-icon">${aKey===e?'✓':aKey?'✗':''}</div>`:''}
+    </div>`;
+  });
+  document.getElementById('slotsContainer').innerHTML=sh;
+  // feedback
+  let fh='';
+  if(fb){
+    fh=`<div class="fb-route"><div class="fb-title">Ruta completa del condicionamiento:</div><div class="fb-text">${s.route}</div></div>
+    <div class="fb-tip"><strong>Distinción con el operante:</strong> ${s.tip}</div>`;
+  }
+  document.getElementById('feedbackContainer').innerHTML=fh;
+  // buttons
+  document.getElementById('btnPrev').disabled=current===0;
+  document.getElementById('btnVerify').style.display=fb?'none':'inline-block';
+  document.getElementById('btnVerify').disabled=Object.keys(assignments).length<5;
+  document.getElementById('btnNext').style.display=fb?'inline-block':'none';
+  document.getElementById('btnNext').textContent=current<24?'Siguiente →':'Ver resultados';
+}
+
+function selectOpt(key){
+  if(answers[current])return;
+  dragSource=dragSource===key?null:key;
+  renderExercise();
+}
+
+function slotClick(slot){
+  if(answers[current])return;
+  if(dragSource){
+    // remove from other slots
+    Object.keys(assignments).forEach(k=>{if(assignments[k]===dragSource)delete assignments[k];});
+    assignments[slot]=dragSource;
+    dragSource=null;
+  }else if(assignments[slot]){
+    delete assignments[slot];
+  }
+  renderExercise();
+}
+
+function handleSubmit(){
+  if(Object.keys(assignments).length<5||answers[current])return;
+  const correct=ELEMENTS.every(e=>assignments[e]===e);
+  answers[current]={assignments:{...assignments},correct};
+  renderExercise();
+}
+
+function goNext(){
+  if(current<24){initScenario(current+1);}
+  else{showResults();}
+}
+function goPrev(){if(current>0){initScenario(current-1);if(answers[current]){assignments=answers[current].assignments;renderExercise();}}}
+
+function showResults(){
+  showScreen('results');
+  const vals=Object.values(answers);
+  const c=vals.filter(a=>a.correct).length;
+  const w=vals.filter(a=>!a.correct).length;
+  const u=25-c-w;
+  document.getElementById('scoresDiv').innerHTML=`
+    <div class="s"><div class="n g">${c}</div><div class="l">Correctas</div></div>
+    <div class="s"><div class="n r">${w}</div><div class="l">Incorrectas</div></div>
+    <div class="s"><div class="n o">${u}</div><div class="l">Sin responder</div></div>`;
+  document.getElementById('pctDiv').textContent=`Puntaje: ${c}/25 (${Math.round(c/25*100)}%)`;
+  const v=c>=22?'Desempeño sobresaliente':c>=18?'Buen dominio conceptual':c>=13?'Dominio parcial — se recomienda revisión':'Se requiere estudio adicional significativo';
+  const vc=c>=20?'#2d936c':c>=15?'#e07a00':'#c22d4e';
+  document.getElementById('verdictDiv').innerHTML=`<span style="color:${vc}">${v}</span>`;
+  document.getElementById('keysContainer').style.display='none';
+  document.getElementById('btnToggleKeys').textContent='Ver claves de respuesta y justificación';
+}
+
+function toggleKeys(){
+  const kc=document.getElementById('keysContainer');
+  if(kc.style.display==='none'){
+    kc.style.display='block';
+    document.getElementById('btnToggleKeys').textContent='Ocultar claves';
+    let h='';
+    SCENARIOS.forEach((s,i)=>{
+      const a=answers[i];
+      const st=a?(a.correct?'<span style="color:#2d936c">✓ Correcto</span>':'<span style="color:#c22d4e">✗ Incorrecto</span>'):'<span style="color:#666">— Sin responder</span>';
+      h+=`<div class="key-card ${levelClass(s.level)}">
+        <div class="key-head"><span class="badge ${levelClass(s.level)}">${s.level}</span><span class="ttl">#${s.id}. ${s.title}</span><span class="st">${st}</span></div>
+        <div class="key-ctx">${s.context}</div>`;
+      ELEMENTS.forEach(e=>{h+=`<div class="key-el"><span class="k">${SHORT[e]}:</span> <span class="v">${s[e]}</span></div>`;});
+      h+=`<div class="key-route"><strong>Ruta:</strong> <span>${s.route}</span></div>
+        <div class="key-tip"><strong>Nota diferencial:</strong> ${s.tip}</div></div>`;
+    });
+    kc.innerHTML=h;
+  }else{
+    kc.style.display='none';
+    document.getElementById('btnToggleKeys').textContent='Ver claves de respuesta y justificación';
+  }
+}
+</script>
+</body>
+</html>
